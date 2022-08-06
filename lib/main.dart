@@ -32,6 +32,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final formKey = GlobalKey<FormState>();
   String? name = "";
+  TextEditingController imageController = TextEditingController();
+  TextEditingController shinyImageController = TextEditingController();
+  TextEditingController dotImageController = TextEditingController();
+  TextEditingController dotShinyImageController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -178,10 +182,20 @@ class _MyHomePageState extends State<MyHomePage> {
                         this.name = val;
                       });
                     }),
+                OutlinedButton(
+                    onPressed: () {
+                      log("눌렸다");
+                      this.imageController.text = "1";
+                      this.shinyImageController.text = "2";
+                      this.dotImageController.text = "3";
+                      this.dotShinyImageController.text = "4";
+                    },
+                    child: Text("기본 이미지")),
                 /** 도트이미지 **/
                 CustomTextField(
                     context: context,
                     hint: "도트이미지",
+                    controller: this.dotImageController,
                     inputType: TextInputType.text,
                     onSaved: (val) {
                       setState(() {
@@ -192,6 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 CustomTextField(
                     context: context,
                     hint: "도트 이로치 이미지",
+                    controller: this.dotShinyImageController,
                     inputType: TextInputType.text,
                     onSaved: (val) {
                       setState(() {
@@ -202,6 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 CustomTextField(
                     context: context,
                     hint: "이미지",
+                    controller: this.imageController,
                     inputType: TextInputType.text,
                     onSaved: (val) {
                       setState(() {
@@ -212,12 +228,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 CustomTextField(
                     context: context,
                     hint: "이로치 이미지",
+                    controller: this.shinyImageController,
                     inputType: TextInputType.text,
                     onSaved: (val) {
                       setState(() {
                         this.name = val;
                       });
                     }),
+                Container(margin: EdgeInsets.all(10)),
+                Image.network('${dotImageController.text}'),
+                Image.network('${dotShinyImageController.text}'),
+                Image.network('${imageController.text}'),
+                Image.network('${shinyImageController.text}'),
+                Container(margin: EdgeInsets.all(10)),
+                OutlinedButton(onPressed: () {
+                  setState(() {});
+                }, child: Text("이미지 확인")),
+                Container(margin: EdgeInsets.all(10)),
                 RaisedButton(
                   onPressed: () async {
                     if (this.formKey.currentState!.validate()) {
@@ -261,7 +288,8 @@ Widget CustomTextField(
     {required BuildContext context,
     required FormFieldSetter onSaved,
     required String hint,
-    required TextInputType inputType}) {
+    required TextInputType inputType,
+    TextEditingController? controller}) {
   return Container(
     padding: EdgeInsets.all(8),
     child: Column(
@@ -272,6 +300,7 @@ Widget CustomTextField(
                 return value;
               }
             },
+            controller: controller,
             onSaved: onSaved,
             keyboardType: inputType,
             decoration: InputDecoration(
